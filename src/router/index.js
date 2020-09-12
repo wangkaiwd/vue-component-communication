@@ -18,6 +18,11 @@ const routes = [
     path: '/demo-twoway',
     component: () => import('@/views/bind-two-way/demo-two-way'),
     name: '双向绑定'
+  },
+  {
+    path: '/demo-access-instance',
+    component: () => import('@/views/access-instance/demo-access-instance'),
+    name: '访问实例'
   }
 ];
 

@@ -12,7 +12,7 @@
 ```vue
 <!--demo-props-->
 <template>
-  <div class="demo-props">
+  <div class="demo-access-instance">
     <h2>{{ count }}</h2>
     <demo-child
       :count="count"
@@ -43,7 +43,7 @@
 ```vue
 <!--demo-props-->
 <template>
-  <div class="demo-props">
+  <div class="demo-access-instance">
     <h2>{{ count }}</h2>
     <demo-child v-bind="{count,addCount}" >
     </demo-child>
@@ -197,6 +197,79 @@ export default {
 
 而对于使用`.sync`修饰符的`count1`，我们可以随意指定其要传递给子组件的属性名，而不只能是`value`，并且会通过监听`@update:count1`，在`count1`发生变化后通过调用`@update:count1`对应的内容来更新`count1`。(注意：这里`@update:count1`中的`count1`与子组件中`props`接收的属性相同)
 
-当然，`v-model`也并不是一定只能监听`value`属性和`@input`事件，`Vue`为我们提供了自定义属性及更新方法的功能：
+当然，`v-model`也并不是一定只能监听`value`属性和`input`事件，`Vue`为我们提供了自定义属性及更新方法的功能：
 [自定义组件的`v-model`](https://cn.vuejs.org/v2/guide/components-custom-events.html#%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6%E7%9A%84-v-model) 
 ![](https://raw.githubusercontent.com/wangkaiwd/drawing-bed/master/20200912193105.png)
+
+到这里，我们使用`v-model/.sync`更简单的实现了功能。
+
+### `$parent/$children`
+`Vue`可以让我们通过`$parent/$children`来直接访问到父组件或子组件实例，这样就可以使用组件中的任意属性或方法。
+```vue
+<template>
+  <div class="demo-access-instance">
+    <h2>parent:{{ count }}</h2>
+    <h2>child:{{ child.count }}</h2>
+    <demo-child>
+    </demo-child>
+    <button @click="addCount">parent click</button>
+  </div>
+</template>
+
+<script>
+import DemoChild from './demo-child';
+
+export default {
+  name: 'DemoAccessInstance',
+  components: {
+    DemoChild
+  },
+  data () {
+    return {
+      count: 0,
+      child: {}
+    };
+  },
+  computed: {},
+  mounted () {
+    this.child = this.$children[0];
+  },
+  methods: {
+    addCount () {
+      this.count++;
+    }
+  }
+};
+</script>
+```
+在父组件挂载完成后，通过`this.$chilren[0]`获取到了子组件实例，之后直接通过子组件实例来访问子组件的`count`属性。
+
+```vue
+<template>
+  <div class="demo-child">
+    <button @click="addCount">child click</button>
+    <button @click="addParentCount">child:update parent count</button>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'DemoChild',
+  props: {},
+  data () {
+    return {
+      count: 0
+    };
+  },
+  methods: {
+    addCount () {
+      this.count++;
+    },
+    addParentCount () {
+      this.$parent.count++;
+    }
+  }
+};
+</script>
+```
+在子组件中，也可以通过`this.$parent`来直接获取到父组件的`count`属性进行更新。
