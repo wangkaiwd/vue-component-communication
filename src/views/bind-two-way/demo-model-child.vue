@@ -1,6 +1,7 @@
 <template>
   <div class="demo-model-child">
     <button @click="addCount">child click</button>
+    <button @click="$emit('update:count1',count1+1)">child: update .sync count1</button>
   </div>
 </template>
 

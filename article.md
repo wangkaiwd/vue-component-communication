@@ -91,6 +91,110 @@ export default {
 完成上述代码后，我们依旧可以通过点击各个组件内的按钮来更新`count`属性
 
 ### 双向绑定`v-model/.sync`
-`Vue`为了方便用户，提供了俩个可以实现**双向绑定数据**的语法糖。用户不在需要在父组件进行事件监听，便可以在实现属性的自动更新。这俩个语法糖的本质如下：
+`Vue`为了方便用户，提供了俩个可以实现**双向绑定数据**的语法糖。用户不在需要在父组件进行事件监听，便可以在实现属性的自动更新。
+```vue
+<template>
+  <div class="demo-two-way">
+    <h2>count: {{ count }}</h2>
+    <h2>count1: {{ count1 }}</h2>
+    <h2>count2: {{ count2 }}</h2>
+    <demo-child
+      v-model="count"
+      :count1.sync="count1"
+    >
+    </demo-child>
+    <button @click="count++">parent click</button>
+  </div>
+</template>
+```
+```vue
+<template>
+  <div class="demo-child">
+    <demo-grandson :add-count="addCount"></demo-grandson>
+    <button @click="addCount">child click</button>
+    <button @click="$emit('update:count1',count1+1)">child:update .sync count1</button>
+  </div>
+</template>
+<script>
+export default {
+  name: 'DemoChild',
+  props: {
+    value: {
+      type: Number,
+      default: 0
+    },
+    count1: {}
+  },
+  components: {
+    DemoGrandson
+  },
+  data () {
+    return {};
+  },
+  methods: {
+    addCount () {
+      this.$emit('input', this.value + 1);
+    }
+  }
+};
+</script>
+```
+相比于之前的传参方式，我们不再需要在父组件中监听`addCount`事件来更新父组件中的`count`。`Vue`会帮我们自动监听对应的事件，并更新属性值。
+
+这俩个语法糖的本质如下：
 * `v-model`: `value` + `@input`
 * `xxx.sync`: `@update:xxx`
+
+下面我们模拟实现下这俩个语法为我们简化的一些事情：
+```vue
+<!-- 父组件 -->
+<template>
+  <div class="demo-model">
+    <h2>模拟实现v-model的count: {{ count }}</h2>
+    <h2>模拟实现.sync指令的count: {{ count1 }}</h2>
+    <demo-child
+      :value="count"
+      @input="count = $event"
+      :count1="count1"
+      @update:count1="count1 = $event"
+    >
+    </demo-child>
+  </div>
+</template>
+```
+```vue
+<!--子组件-->
+<template>
+  <div class="demo-model-child">
+    <button @click="addCount">child click</button>
+    <button @click="$emit('update:count1',count1+1)">child: update .sync count1</button>
+  </div>
+</template>
+<script>
+export default {
+  name: 'DemoModelChild',
+  props: {
+    value: {
+      type: Number,
+      default: 0
+    },
+    count1: {}
+  },
+  data () {
+    return {};
+  },
+  methods: {
+    addCount () {
+      this.$emit('input', this.value + 1);
+    }
+  }
+};
+</script>
+```
+对于上例中的`count`属性，我们通过`value`来接收，并将其传到子组件。然后子组件中通过调用`this.$emit('input',this.value+1)`通知父组件调用`@input`指令监听的发放，并将最新值作为参数传入。
+
+父组件受到通知后调用`@input`指令对应的内容，并通过传入的参数来更新`count`属性。
+
+而对于使用`.sync`修饰符的`count1`，我们可以随意指定其要传递给子组件的属性名，而不只能是`value`，并且会通过监听`@update:count1`，在`count1`发生变化后通过调用`@update:count1`对应的内容来更新`count1`。(注意：这里`@update:count1`中的`count1`与子组件中`props`接收的属性相同)
+
+

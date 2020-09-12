@@ -1,7 +1,14 @@
 <template>
   <div class="demo-model">
-    <h2>自己实现v-model的count: {{ count }}</h2>
-    <demo-child :value="count" @input="count = $event"></demo-child>
+    <h2>模拟实现v-model的count: {{ count }}</h2>
+    <h2>模拟实现.sync指令的count: {{ count1 }}</h2>
+    <demo-child
+      :value="count"
+      @input="count = $event"
+      :count1="count1"
+      @update:count1="count1 = $event"
+    >
+    </demo-child>
   </div>
 </template>
 
@@ -15,7 +22,8 @@ export default {
   },
   data () {
     return {
-      count: 0
+      count: 0,
+      count1: 0
     };
   },
 };

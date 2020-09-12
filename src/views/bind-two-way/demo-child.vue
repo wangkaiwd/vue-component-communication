@@ -2,7 +2,7 @@
   <div class="demo-child">
     <demo-grandson :add-count="addCount"></demo-grandson>
     <button @click="addCount">child click</button>
-    <button @click="$emit('update:count1',count1+1)">child:update count1</button>
+    <button @click="$emit('update:count1',count1+1)">child:update .sync count1</button>
   </div>
 </template>
 
