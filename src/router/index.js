@@ -6,12 +6,12 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: '/demo-props',
-    component: () => import('@/views/demo-props'),
+    component: () => import('@/views/props/demo-props'),
     name: 'props'
   },
   {
     path: '/demo-twoway',
-    component: () => import('@/views/demo-two-way'),
+    component: () => import('@/views/bind-two-way/demo-two-way'),
     name: '双向绑定'
   }
 ];
