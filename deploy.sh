@@ -20,8 +20,12 @@ git commit -m 'deploy'
 # git push -f git@github.com:<USERNAME>/<USERNAME>.github.io.git master
 
 # if you are deploying to https://<USERNAME>.github.io/<REPO>
+# push file from local master branch to remote repository address git@github.com:wangkaiwd/vue-component-communication.git gh-pages branch
+# https://www.ruanyifeng.com/blog/2014/06/git_remote.html
  git push -f git@github.com:wangkaiwd/vue-component-communication.git master:gh-pages
 
+# back to previous location
 cd -
 
+# remove dist file
 rm -rf dist
