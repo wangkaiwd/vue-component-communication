@@ -1,22 +1,22 @@
 <template>
   <div class="demo-props">
     <h2>{{ count }}</h2>
-    <demo-children
+    <demo-child
       :count="count"
       :add-count="addCount"
     >
-    </demo-children>
+    </demo-child>
     <button @click="addCount">parent click</button>
   </div>
 </template>
 
 <script>
-import DemoChildren from './demo-child';
+import DemoChild from './demo-child';
 
 export default {
   name: 'DemoProps',
   components: {
-    DemoChildren
+    DemoChild
   },
   data () {
     return {

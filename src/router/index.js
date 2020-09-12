@@ -10,6 +10,11 @@ const routes = [
     name: 'props'
   },
   {
+    path: '/demo-custom-events',
+    component: () => import('@/views/custom-event/demo-custom-event'),
+    name: '自定义事件'
+  },
+  {
     path: '/demo-twoway',
     component: () => import('@/views/bind-two-way/demo-two-way'),
     name: '双向绑定'

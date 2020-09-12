@@ -1,6 +1,6 @@
 <template>
   <div class="demo-child">
-    <demo-grandson :add-count="addCount"></demo-grandson>
+    <demo-grandson @add-count="addCount"></demo-grandson>
     <button @click="addCount">child click</button>
   </div>
 </template>
@@ -15,9 +15,6 @@ export default {
       type: Number,
       default: 0
     },
-    addCount: {
-      type: Function
-    }
   },
   components: {
     DemoGrandson
@@ -25,6 +22,11 @@ export default {
   data () {
     return {};
   },
+  methods: {
+    addCount () {
+      this.$emit('add-count');
+    }
+  }
 };
 </script>
 

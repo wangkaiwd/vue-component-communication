@@ -7,14 +7,15 @@
 <script>
 export default {
   name: 'DemoGrandson',
-  props: {
-    addCount: {
-      type: Function
-    }
-  },
+  props: {},
   data () {
     return {};
   },
+  methods: {
+    addCount () {
+      this.$emit('add-count');
+    }
+  }
 };
 </script>
 

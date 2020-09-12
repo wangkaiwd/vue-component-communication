@@ -14,11 +14,11 @@
 <template>
   <div class="demo-props">
     <h2>{{ count }}</h2>
-    <demo-children
+    <demo-child
       :count="count"
       :add-count="addCount"
     >
-    </demo-children>
+    </demo-child>
     <button @click="addCount">parent click</button>
   </div>
 </template>
@@ -45,14 +45,50 @@
 <template>
   <div class="demo-props">
     <h2>{{ count }}</h2>
-    <demo-children v-bind="{count,addCount}" >
-    </demo-children>
+    <demo-child v-bind="{count,addCount}" >
+    </demo-child>
     <button @click="addCount">parent click</button>
   </div>
 </template>
 ```
 
 ### 自定义事件
+`Vue`中可以通过`@`符号来监听自定义事件，并在子组件中通过`$emit`方法来触发监听的事件。我们将上面的例子用自定义事件来进行改写：
+```vue
+<!--demo-custom-event-->
+<template>
+  <div class="demo-custom-event">
+    <h2>{{ count }}</h2>
+    <demo-child
+      :count="count"
+      @add-count="addCount"
+    >
+    </demo-child>
+    <button @click="addCount">parent click</button>
+  </div>
+</template>
+```
+
+```vue
+<template>
+  <div class="demo-child">
+    <demo-grandson @add-count="addCount"></demo-grandson>
+    <button @click="addCount">child click</button>
+  </div>
+</template>
+<script>
+export default {
+  // ...
+  methods: {
+    addCount () {
+      // 通知父组件执行'add-count'对应的事件
+      this.$emit('add-count');
+    }
+  }
+};
+</script>
+```
+完成上述代码后，我们依旧可以通过点击各个组件内的按钮来更新`count`属性
 
 ### 双向绑定`v-model/.sync`
 
