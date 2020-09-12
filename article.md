@@ -1,7 +1,8 @@
 ## `Vue`组件通信
 使用`Vue`进行项目开发，碰到的比较多的问题就是如何进行组件之间的参数传递。为了能够更优雅的解决此类问题，笔者在这里总结了开发中经常用到的一些组件通信方式，并配合一些例子方便理解。
 
-源码地址：
+* 源码地址：[`vue-component-communication`](https://github.com/wangkaiwd/vue-component-communication/blob/master/article.md)
+* [在线访问](https://wangkaiwd.github.io/vue-component-communication)
 
 所有的例子都在`src/views`目录中，有需要的小伙伴可以自行取用
 
