@@ -1,6 +1,6 @@
 <template>
   <div class="demo-child">
-    <demo-grandson @change-name="changeName" :name="name" :count="count"></demo-grandson>
+    <demo-grandson></demo-grandson>
     <button @click="$emit('add-count')">child click</button>
   </div>
 </template>
@@ -20,15 +20,9 @@ export default {
     DemoGrandson
   },
   data () {
-    return {
-      name: '张三'
-    };
+    return {};
   },
-  methods: {
-    changeName () {
-      this.name = this.name + 1;
-    }
-  }
+  methods: {}
 };
 </script>
 

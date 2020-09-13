@@ -416,6 +416,152 @@ export default {
 `provide/inject`的数据传递思路如下：
 ![](https://raw.githubusercontent.com/wangkaiwd/drawing-bed/master/Untitled-2020-09-12-1714.png)
 
+### $dispatch/$broadcast
+当我们的组件层级比较深的时候，我们需要一层一层向下传递事件，而当更新父组件中的某个属性时，又需要一层一层的将更新向上通知，大概的逻辑如下：
+![](https://raw.githubusercontent.com/wangkaiwd/drawing-bed/master/Untitled-2020-09-14-0028%20(1).png)
+
+为了可以直接通过子组件更新父组件，而不再用经历中间的事件监听步骤，我们可以递归遍历找到父组件的子组件(`demo-child`)，然后调用它的`$emit('event-name')`来更新父组件中的属性。这便是`$dispatch`方法的核心思路，代码如下：
+```javascript
+Vue.prototype.$dispatch = function (ComponentName, event, ...args) {
+  let parent = this.$parent;
+  while (parent) { //
+    const { name } = parent.$options;
+    // 递归查找父组件，如果组件名满足要求的话，调用组件实例的$emit方法
+    if (name === ComponentName) {
+      parent.$emit(event, ...args);
+      break;
+    }
+    parent = parent.$parent;
+  }
+};
+```
+
+而`$broadcast`方法可以帮我们在父组件中直接调用较深层的子组件的`$emit('eventName')`方法，从而通过子组件的父组件更改传入到子组件的值(在本例中为`grandson`传入到`great-grandson`中的`name`属性)，代码如下：
+```javascript
+Vue.prototype.$broadcast = function (ComponentName, event, ...args) {
+  for (let i = 0; i < this.$children.length; i++) {
+    const child = this.$children[i];
+    const { name } = child.$options;
+    // 如果找到满足的子组件，调用$emit方法
+    if (name === ComponentName) {
+      child.$emit(event, ...args);
+    } else {
+      if (child.$children) {
+        // 继续递归查找符合要求的子组件
+        child.$broadcast(ComponentName, event, ...args);
+      }
+    }
+  }
+};
+```
+在原型上添加了对应的方法后，我们便可以在组件中通过组件实例来直接调用：
+```vue
+<!-- 父组件 -->
+<template>
+  <div class="demo-extend-proto">
+    <h2>parent: {{ count }}</h2>
+    <demo-child
+      :count="count"
+      @add-count="addCount"
+    >
+    </demo-child>
+    <button @click="changeName">parent:change name</button>
+  </div>
+</template>
+
+<script>
+import DemoChild from './demo-child';
+
+export default {
+  name: 'DemoExtendProto',
+  components: { DemoChild },
+  data () {
+    return {
+      count: 0
+    };
+  },
+  methods: {
+    addCount (params) {
+      this.count++;
+    },
+    changeName () {
+      // 更新直接name属性
+      this.$broadcast('DemoGreatGrandson', 'change-name', 'xxx');
+    }
+  }
+};
+</script>
+```
+```vue
+<!-- 子组件 -->
+<template>
+  <div class="demo-child">
+    <demo-grandson></demo-grandson>
+    <button @click="$emit('add-count')">child click</button>
+  </div>
+</template>
+```
+```vue
+<!-- grandson -->
+<template>
+  <div class="demo-grandson">
+    <great-grandson :name="name" @change-name="changeName"></great-grandson>
+    <button @click="addCount">grandson click</button>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'DemoGrandson',
+  // ... some code
+  data () {
+    return {
+      name: '张三'
+    };
+  },
+  methods: {
+    addCount () {
+      // 直接通知父组件更新count
+      this.$dispatch('DemoChild', 'add-count', 'xxx');
+    },
+    changeName () {
+      this.name = this.name + 1;
+    }
+  }
+};
+</script>
+```
+```vue
+<template>
+  <div class="demo-great-grandson">
+    <h2>great grandson:{{ name }}</h2>
+    <button @click="addCount">great-grandson: click</button>
+  </div>
+</template>
+
+<script>
+export default {
+  // ... some code
+  props: {
+    name: {
+      type: String,
+    }
+  },
+  methods: {
+    addCount () {
+      // 直接通知父组件更新count
+      this.$dispatch('DemoChild', 'add-count', 'xxx');
+    },
+  }
+};
+</script>
+```
+上边代码的逻辑大概如下：
+![](https://raw.githubusercontent.com/wangkaiwd/drawing-bed/master/Untitled-2020-09-14-0028.png)
+
+现在我们便可以通过`$dispatch/$broadcast`来实现跨层级调用`$emit`方法，少写一些进行事件监听的`@`和`$emit`代码。
+
+
 ### 事件总线(bus)
 `Vue`通过`$emit/$on`实现事件的发布订阅机制，通过`$on`来订阅事件，通过`$emit`来触发`$on`订阅的事件，并将需要的参数传入。我们也正好可以利用`Vue`的`$emit`和`$on`属性来进行组件之间的函数调用。
 
@@ -479,3 +625,10 @@ export default {
 </template>
 ```
 不管组件层级有多深，我们都可以通过约定好的名字(例子中是`add-count`)来直接调用父组件中订阅函数。
+
+### `Vuex`
+对于稍大规模一点的项目来说，通过`Vuex`来管理全局状态比较好的选择。我们可以在任意组件使用`Vuex`中的`state`，并且可以通过`commit`一个`mutation`来更新状态。
+
+下面我们用`Vuex`来再次实现`count`累加的例子：
+
+### 结语

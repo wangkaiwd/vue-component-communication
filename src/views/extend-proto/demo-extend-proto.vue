@@ -1,5 +1,6 @@
 <template>
   <div class="demo-extend-proto">
+    <h2>parent: {{ count }}</h2>
     <demo-child
       :count="count"
       @add-count="addCount"
@@ -22,11 +23,11 @@ export default {
   },
   methods: {
     addCount (params) {
-      // 直接调用子元素的addCount事件
       this.count++;
     },
     changeName () {
-      this.$broadcast('DemoGrandson', 'change-name', 'xxx');
+      // 更新直接name属性
+      this.$broadcast('DemoGreatGrandson', 'change-name', 'xxx');
     }
   }
 };
