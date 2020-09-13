@@ -415,3 +415,67 @@ export default {
 
 `provide/inject`的数据传递思路如下：
 ![](https://raw.githubusercontent.com/wangkaiwd/drawing-bed/master/Untitled-2020-09-12-1714.png)
+
+### 事件总线(bus)
+`Vue`通过`$emit/$on`实现事件的发布订阅机制，通过`$on`来订阅事件，通过`$emit`来触发`$on`订阅的事件，并将需要的参数传入。我们也正好可以利用`Vue`的`$emit`和`$on`属性来进行组件之间的函数调用。
+
+首先我们需要在`Vue`的原型上扩展`$bus`属性，方便直接在组件中通过`this.$bus`来进行调用：
+```javascript
+Vue.prototype.$bus = new Vue();
+```
+`$bus`的值是一个新的`Vue`实例，所以它可以调用`Vue`实例的`$emit`和`$on`方法。
+
+在父组件中，我们通过`$bus.$on`来订阅事件：
+```vue
+<template>
+  <div class="demo-bus">
+    <demo-child :count="count"></demo-child>
+  </div>
+</template>
+<script>
+import DemoChild from './demo-child';
+
+export default {
+  name: 'DemoBus',
+  components: {
+    DemoChild
+  },
+  data () {
+    return {
+      count: 0
+    };
+  },
+  mounted () {
+    this.initListeners();
+  },
+  methods: {
+    initListeners () {
+      this.$bus.on('add-count');
+    },
+    addCount () {
+      this.count++;
+    }
+  }
+};
+</script>
+```
+在子组件和孙子组件中，可以通过`$bus.$emit`来通知执行对应的订阅事件来更新`count`属性：
+```vue
+<!-- 子组件 -->
+<template>
+  <div class="demo-child">
+    <h2>child: {{ count }}</h2>
+    <demo-grandson></demo-grandson>
+    <button @click="$bus.$emit('add-count')">child click</button>
+  </div>
+</template>
+```
+```vue
+<!-- 孙子组件 -->
+<template>
+  <div class="demo-grandson">
+    <button @click="$bus.$emit('add-count')">grandson click</button>
+  </div>
+</template>
+```
+不管组件层级有多深，我们都可以通过约定好的名字(例子中是`add-count`)来直接调用父组件中订阅函数。

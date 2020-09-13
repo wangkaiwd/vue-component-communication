@@ -33,6 +33,11 @@ const routes = [
     path: '/demo-provide-inject',
     component: () => import('@/views/provide-inject/demo-provide-inject'),
     name: '依赖注入'
+  },
+  {
+    path: '/demo-bus',
+    component: () => import('@/views/bus/demo-bus'),
+    name: '事件总线'
   }
 ];
 
