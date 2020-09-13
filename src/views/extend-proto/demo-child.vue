@@ -1,7 +1,7 @@
 <template>
   <div class="demo-child">
-    <demo-grandson :add-count="addCount"></demo-grandson>
-    <button @click="addCount">child click</button>
+    <demo-grandson @change-name="changeName" :name="name" :count="count"></demo-grandson>
+    <button @click="$emit('add-count')">child click</button>
   </div>
 </template>
 
@@ -15,16 +15,20 @@ export default {
       type: Number,
       default: 0
     },
-    addCount: {
-      type: Function
-    }
   },
   components: {
     DemoGrandson
   },
   data () {
-    return {};
+    return {
+      name: '张三'
+    };
   },
+  methods: {
+    changeName () {
+      this.name = this.name + 1;
+    }
+  }
 };
 </script>
 
