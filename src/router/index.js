@@ -28,6 +28,11 @@ const routes = [
     path: '/demo-all-props',
     component: () => import('@/views/all-props/demo-all-props'),
     name: '传递所有额外属性'
+  },
+  {
+    path: '/demo-provide-inject',
+    component: () => import('@/views/provide-inject/demo-provide-inject'),
+    name: '依赖注入'
   }
 ];
 
