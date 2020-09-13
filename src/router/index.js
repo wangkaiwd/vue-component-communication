@@ -23,6 +23,11 @@ const routes = [
     path: '/demo-access-instance',
     component: () => import('@/views/access-instance/demo-access-instance'),
     name: '访问实例'
+  },
+  {
+    path: '/demo-all-props',
+    component: () => import('@/views/all-props/demo-all-props'),
+    name: '传递所有额外属性'
   }
 ];
 
