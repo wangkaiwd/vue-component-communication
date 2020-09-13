@@ -38,6 +38,11 @@ const routes = [
     path: '/demo-bus',
     component: () => import('@/views/bus/demo-bus'),
     name: '事件总线'
+  },
+  {
+    path: '/demo-extend-proto',
+    component: () => import('@/views/extend-proto/demo-extend-proto'),
+    name: '分发+广播'
   }
 ];
 
