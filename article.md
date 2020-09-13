@@ -342,3 +342,8 @@ export default {
 这样`demo-grandson`中有再多的属性和事件，我们都可以通过`v-bind=$attrs`和`v-on=$linstenners`进行传入。而不用每次都在`props`中定义，然后在单独在子组件标签上通过`:`和`@`来单独进行绑定。
 
 这俩个属性在对项目中用到的`ui`组件库进行二次封装时尤其好用，既可以保证使用原有组件所有的`api`，还可以额外封装一些项目中复用度高的功能。
+
+### 依赖注入(`provide/inject`)
+`provide/inject`通常用于跨层级传参，不管组件的层级有多深，都可以通过`inject`来获得父组件`provide`提供的内容
+
+![](https://raw.githubusercontent.com/wangkaiwd/drawing-bed/master/Untitled-2020-09-12-1714.png)
