@@ -344,6 +344,74 @@ export default {
 这俩个属性在对项目中用到的`ui`组件库进行二次封装时尤其好用，既可以保证使用原有组件所有的`api`，还可以额外封装一些项目中复用度高的功能。
 
 ### 依赖注入(`provide/inject`)
-`provide/inject`通常用于跨层级传参，不管组件的层级有多深，都可以通过`inject`来获得父组件`provide`提供的内容
+`provide/inject`通常用于跨层级传参，不管组件的层级有多深，都可以通过`inject`来获得父组件`provide`提供的内容。
 
+通常情况下，我们会将父组件的实例通过`provide`传入，这样子组件通过`inject`就可以直接获取到父组件的实例，从而可以使用到父组件实例中定义的任意属性和方法，我们把之前的例子通过`provide/inject`来进行实现：
+```vue
+<!--parent-->
+<template>
+  <div class="demo-provide-inject">
+    <demo-child></demo-child>
+  </div>
+</template>
+
+<script>
+import DemoChild from './demo-child';
+
+export default {
+  name: 'DemoProvideInject',
+  provide () {
+    return { top: this };
+  },
+  components: { DemoChild },
+  data () {
+    return { count: 0 };
+  },
+  methods: {
+    addCount () {
+      this.count++;
+    }
+  }
+};
+</script>
+```
+在子组件中调用`addCount`方法
+```vue
+<template>
+  <div class="demo-child">
+    <demo-grandson></demo-grandson>
+    <button @click="top.addCount">child click</button>
+  </div>
+</template>
+
+<script>
+import DemoGrandson from './demo-grandson';
+
+export default {
+  name: 'DemoChild',
+  inject: ['top'],
+  components: {
+    DemoGrandson
+  },
+};
+</script>
+```
+在孙子组件中渲染`count`到页面中，并且通过按钮来更新`count`:
+```vue
+<template>
+  <div class="demo-grandson">
+    <h2>child: {{ top.count }}</h2>
+    <button @click="top.addCount">grandson click</button>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'DemoGrandson',
+  inject: ['top'],
+};
+</script>
+```
+
+`provide/inject`的数据传递思路如下：
 ![](https://raw.githubusercontent.com/wangkaiwd/drawing-bed/master/Untitled-2020-09-12-1714.png)
