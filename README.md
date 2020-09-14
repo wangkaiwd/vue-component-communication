@@ -14,7 +14,7 @@
 ```vue
 <!--demo-props-->
 <template>
-  <div class="demo-vuex">
+  <div class="demo-props">
     <h2>{{ count }}</h2>
     <demo-child
       :count="count"
@@ -34,7 +34,7 @@
   </div>
 </template>
 ```
-这里我们为`demo-children`传入了`count`和`add-count`属性，然后又将`add-count`传入了`demo-grandson`组件中。这样当我们分别点击父组件(`demo-props`)、子组件(`demo-child`)和孙子组件(`demo-grandson`)中的按钮时，都会更新`count`属性
+这里我们为`demo-children`传入了`count`和`add-count`属性，然后又将`add-count`传入到`demo-grandson`组件中。这样当我们分别点击父组件(`demo-props`)、子组件(`demo-child`)和孙子组件(`demo-grandson`)中的按钮时，都会更新`count`属性
 
 当然我们也可以使用`v-bind`来直接绑定一个对象，`Vue`会帮我们将组件属性进行分发，类似于`react`中的`{...props}`：
 ![](https://raw.githubusercontent.com/wangkaiwd/drawing-bed/master/20200912180143.png)
@@ -45,7 +45,7 @@
 ```vue
 <!--demo-props-->
 <template>
-  <div class="demo-vuex">
+  <div class="demo-props">
     <h2>{{ count }}</h2>
     <demo-child v-bind="{count,addCount}" >
     </demo-child>
@@ -57,7 +57,7 @@
 ### 自定义事件
 `Vue`中可以通过`@`符号来监听自定义事件，并在子组件中通过`$emit`方法来触发监听的事件。我们将上面的例子用自定义事件来进行改写：
 ```vue
-<!--demo-custom-event-->
+<!-- 父组件 -->
 <template>
   <div class="demo-custom-event">
     <h2>{{ count }}</h2>
@@ -72,6 +72,7 @@
 ```
 
 ```vue
+<!-- 子组件 -->
 <template>
   <div class="demo-child">
     <demo-grandson @add-count="addCount"></demo-grandson>
@@ -93,8 +94,9 @@ export default {
 完成上述代码后，我们依旧可以通过点击各个组件内的按钮来更新`count`属性
 
 ### 双向绑定`v-model/.sync`
-`Vue`为了方便用户，提供了俩个可以实现**双向绑定数据**的语法糖。用户不在需要在父组件进行事件监听，便可以在实现属性的自动更新。
+`Vue`为了方便用户，提供了俩个可以实现**双向绑定数据**的语法糖。用户不再需要在父组件进行事件监听，便可以实现属性的自动更新。
 ```vue
+<!-- 父组件 -->
 <template>
   <div class="demo-two-way">
     <h2>count: {{ count }}</h2>
@@ -110,6 +112,7 @@ export default {
 </template>
 ```
 ```vue
+<!-- 子组件 -->
 <template>
   <div class="demo-child">
     <demo-grandson :add-count="addCount"></demo-grandson>
@@ -144,8 +147,8 @@ export default {
 相比于之前的传参方式，我们不再需要在父组件中监听`addCount`事件来更新父组件中的`count`。`Vue`会帮我们自动监听对应的事件，并更新属性值。
 
 这俩个语法糖的本质如下：
-* `v-model`: `value` + `@input`
-* `xxx.sync`: `@update:xxx`
+* `v-model`: 自动绑定`value`属性 + `input`事件
+* `xxx.sync`: 自动绑定`update:xxx`事件
 
 下面我们模拟实现下这俩个语法为我们简化的一些事情：
 ```vue
@@ -209,7 +212,7 @@ export default {
 `Vue`可以让我们通过`$parent/$children`来直接访问到父组件或子组件实例，这样就可以使用组件中的任意属性或方法。
 ```vue
 <template>
-  <div class="demo-vuex">
+  <div class="demo-access-instance">
     <h2>parent:{{ count }}</h2>
     <h2>child:{{ child.count }}</h2>
     <demo-child>
@@ -674,7 +677,7 @@ export default {
 ```vue
 <!-- 父组件 -->
 <template>
-  <div class="demo-vuex">
+  <div class="demo-props">
     <h2>{{ count }}</h2>
     <demo-child>
     </demo-child>

@@ -1,5 +1,5 @@
 <template>
-  <div class="demo-vuex">
+  <div class="demo-props">
     <h2>{{ count }}</h2>
     <demo-child
       :count="count"
@@ -32,7 +32,7 @@ export default {
 </script>
 
 <style scoped>
-.demo-vuex {
+.demo-props {
 
 }
 </style>
