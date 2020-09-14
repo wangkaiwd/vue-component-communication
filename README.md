@@ -418,8 +418,9 @@ export default {
 </script>
 ```
 
-### $dispatch/$broadcast
-当我们的组件层级比较深的时候，我们需要一层一层向下传递事件，而当更新父组件中的某个属性时，又需要一层一层的将更新向上通知，大概的逻辑如下：
+### 事件分发(dispatch)和广播(broadcast)
+当我们的组件层级比较深的时候，我们需要一层一层向下传递事件，而当更新父组件中的某个属性时，又需要一层一层的将更新向上通知，大概的逻辑如下：  
+
 ![](https://raw.githubusercontent.com/wangkaiwd/drawing-bed/master/Untitled-2020-09-14-0028%20(1).png)
 
 为了可以直接通过子组件更新父组件，而不再用经历中间的事件监听步骤，我们可以递归遍历找到父组件的子组件(`demo-child`)，然后调用它的`$emit('event-name')`来更新父组件中的属性。这便是`$dispatch`方法的核心思路，代码如下：
@@ -564,11 +565,13 @@ export default {
 现在我们便可以通过`$dispatch/$broadcast`来实现跨层级调用`$emit`方法，少写一些进行事件监听的`@`和`$emit`代码。
 
 上述代码参考`element ui`源码中`$dispatch/$broadcast`的相应实现：
+
 ![](https://raw.githubusercontent.com/wangkaiwd/drawing-bed/master/20200914110021.png)
-最终可以通过`mixins`来混入到组件中进行使用： 
+
+`elememnt ui`并没有将方法挂载到`Vue`的原型上，而是定义了`mixins`中，最终可以通过`mixins`属性来混入到组件中进行使用： 
 ![](https://raw.githubusercontent.com/wangkaiwd/drawing-bed/master/20200914110610.png)
 
-> 截图中的代码地址：  
+> 截图中的代码地址，有兴趣的小伙伴可以点击链接直接查看：  
 > * [emitter](https://github.com/ElemeFE/element/blob/dev/src/mixins/emitter.js)
 > * [form-item](https://github.com/ElemeFE/element/blob/04b5f0d2c042fb1efabaebe40749287761c14a21/packages/form/src/form-item.vue#L52)
 
