@@ -196,13 +196,13 @@ export default {
 };
 </script>
 ```
-对于上例中的`count`属性，我们通过`value`来接收，并将其传到子组件。然后子组件中通过调用`this.$emit('input',this.value+1)`通知父组件调用`@input`指令监听的发放，并将最新值作为参数传入。
+上例中的`count`属性，我们通过`value`来接收，并将其传到子组件。然后子组件中通过调用`this.$emit('input',this.value+1)`通知父组件调用`@input`指令监听的事件，并将最新值作为参数传入。
 
-父组件受到通知后调用`@input`指令对应的内容，并通过传入的参数来更新`count`属性。
+父组件收到通知后调用`@input`指令监听的事件，并通过传入的参数来更新`count`属性。
 
-而对于使用`.sync`修饰符的`count1`，我们可以随意指定其要传递给子组件的属性名，而不只能是`value`，并且会通过监听`@update:count1`，在`count1`发生变化后通过调用`@update:count1`对应的内容来更新`count1`。(注意：这里`@update:count1`中的`count1`与子组件中`props`接收的属性相同)
+而对于使用`.sync`修饰符的`count1`，我们可以随意指定其要传递给子组件的属性名，而不只能是`value`(`v-model`中的`value`也可以更改)，并且会通过监听`@update:count1`，在`count1`发生变化后通过调用`@update:count1`对应的内容来更新`count1`。(注意：这里`@update:count1`中的`count1`与子组件中`props`接收的属性相同)
 
-当然，`v-model`也并不是一定只能监听`value`属性和`input`事件，`Vue`为我们提供了自定义属性及更新方法的功能：
+当然，`v-model`也并不是一定只能监听`value`属性和`input`事件，`Vue`为我们提供了自定义属性及更新事件的功能：
 [自定义组件的`v-model`](https://cn.vuejs.org/v2/guide/components-custom-events.html#%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6%E7%9A%84-v-model) 
 ![](https://raw.githubusercontent.com/wangkaiwd/drawing-bed/master/20200912193105.png)
 
