@@ -5,10 +5,11 @@
 * 源码地址：[`vue-component-communication`](https://github.com/wangkaiwd/vue-component-communication/blob/master/article.md)
 * [在线访问](https://wangkaiwd.github.io/vue-component-communication)
 
-所有的例子都在`src/views`目录中，有需要的小伙伴可以自行取用
+每一小节的例子都在`src/views`目录中，小伙伴可以结合对应的代码来阅读文章。
+
+码字不易，如果文章内容对你有帮助的话，希望能点赞鼓励一下作者。
 
 > 注：有些例子刻意为之，只是为了学习对应的知识点，对于实际使用场景刻意不必深究
-
 ### `props`传参
 在`Vue`中，我们可以通过为子组件传入`props`，然后在子组件中接收，并通过`this`来直接访问
 ```vue
@@ -641,7 +642,7 @@ export default {
 不管组件层级有多深，我们都可以通过约定好的名字(例子中是`add-count`)来直接调用父组件中的订阅函数。
 
 ### `Vuex`
-对于稍大规模一点的项目来说，通过`Vuex`来管理全局状态比较好的选择。我们可以在任意组件使用`Vuex`中的`state`，并且可以通过`commit`一个`mutation`来更新状态。
+对于稍大规模一点的项目来说，通过`Vuex`来管理全局状态是比较好的选择。我们可以在任意组件使用`Vuex`中的`state`，并且可以通过`commit`一个`mutation`来更新状态。
 
 下面我们用`Vuex`来再次实现`count`累加的例子。
 
@@ -661,7 +662,7 @@ export default new Vuex.Store({
 
 可以在任意组件中引入，并且更改`state`。
 
-每个文件中引入辅助函数的代码如下：
+每个文件中引入`Vuex`辅助函数的代码如下：
 ```js
 import { mapMutations, mapState } from 'vuex';
 
@@ -705,4 +706,9 @@ export default {
   </div>
 </template>
 ```
-现在我们可以通过调用`Vuex`通过辅助函数在实例上提供`count`属性和`addCount`方法，就可以任意组件使用和更新`count`。
+现在我们可以通过`Vuex`辅助函数在实例上提供的`count`属性和`addCount`方法，就可以在任意组件使用和更新`count`。
+
+### 总结
+当我们能够熟练掌握组件之间的各种传参技巧后，在实际的工作以及面试中便能够更加的游刃有余、从容不迫。
+
+我们面临一个实际问题之后，所思考的不再是如何进行组件传参，而是如何能更好的选择和设计一种比较灵活优雅的传参方法，提高程序的可读性和可扩展性。
