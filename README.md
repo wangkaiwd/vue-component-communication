@@ -348,6 +348,9 @@ export default {
 ### 依赖注入(`provide/inject`)
 `provide/inject`通常用于跨层级传参，不管组件的层级有多深，都可以通过`inject`来获得父组件`provide`提供的内容。
 
+`provide/inject`的数据传递思路如下：
+![](https://raw.githubusercontent.com/wangkaiwd/drawing-bed/master/Untitled-2020-09-12-1714.png)
+
 通常情况下，我们会将父组件的实例通过`provide`传入，这样子组件通过`inject`就可以直接获取到父组件的实例，从而可以使用到父组件实例中定义的任意属性和方法，我们把之前的例子通过`provide/inject`来进行实现：
 ```vue
 <!--parent-->
@@ -414,9 +417,6 @@ export default {
 };
 </script>
 ```
-
-`provide/inject`的数据传递思路如下：
-![](https://raw.githubusercontent.com/wangkaiwd/drawing-bed/master/Untitled-2020-09-12-1714.png)
 
 ### $dispatch/$broadcast
 当我们的组件层级比较深的时候，我们需要一层一层向下传递事件，而当更新父组件中的某个属性时，又需要一层一层的将更新向上通知，大概的逻辑如下：
