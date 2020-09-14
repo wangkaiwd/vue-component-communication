@@ -1,4 +1,4 @@
-## `Vue`组件通信
+## `Vue`组件通信详解
 使用`Vue`进行项目开发，碰到的比较多的问题就是如何进行组件之间的参数传递。为了能够更优雅的解决此类问题，笔者在这里总结了开发中经常用到的一些组件通信方式，并配合一些例子方便理解。
 ![](https://raw.githubusercontent.com/wangkaiwd/drawing-bed/master/Vue-2020-9-14-11-35.png)
 
