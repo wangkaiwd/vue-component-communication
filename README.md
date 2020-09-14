@@ -209,7 +209,7 @@ export default {
 到这里，我们使用`v-model/.sync`更简单的实现了功能。
 
 ### `$parent/$children`
-`Vue`可以让我们通过`$parent/$children`来直接访问到父组件或子组件实例，这样就可以使用组件中的任意属性或方法。
+`Vue`可以让我们通过`$parent/$children`来直接访问到父组件或子组件实例，这样就可以直接使用组件实例中的任意属性和方法。
 ```vue
 <template>
   <div class="demo-access-instance">
@@ -280,16 +280,16 @@ export default {
 在子组件中，也可以通过`this.$parent`来直接获取到父组件的`count`属性进行更新。
 
 ### `$attrs/$listeners`
-在很多情况，我们并不需要重新封装一个组件，而是只需要在旧有组件的基础上再添加一些功能。这里我们就用到了`$attrs`和`$listenners`属性，而`$attrs`又会与`inheritAttrs`属性一起使用。
+在很多情况下，我们并不需要重新封装一个组件，而是只需要在旧有组件的基础上再添加一些功能。这里我们就用到了`$attrs`和`$listenners`属性，而`$attrs`又会与`inheritAttrs`属性一起使用。
 
 先看一下这些属性的用途：  
 * [`$attrs`](https://cn.vuejs.org/v2/api/index.html#vm-attrs): 包含父作用域中绑定的没有被识别或提取为`props`的属性(`class`和`style`除外)
 * [`inheritAttrs`](https://cn.vuejs.org/v2/api/index.html#inheritAttrs): 默认的，父作用域中没有被作为`props`识别的属性将会"回退"，并且作为正常的`HTML`属性应用到子组件的根元素。设置`inheritAttrs`为`false`，将会禁用这个默认行为。
 * [`$listenners`](https://cn.vuejs.org/v2/api/index.html#vm-listeners): 包含父作用域中`v-on`绑定的监听器(不包括`.native`修饰符绑定的监听器)
 
-假设我们有`demo-grandson`组件，可以接收`count`进行展示，并且接受方法`addCount`来更新组件。
+假设我们有`demo-grandson`组件，可以接收`count`进行展示，并且接受`addCount`方法来更新`count`。
 
-而现在我们想要在不改变`demo-grandson`的基础上，再实现一个组件，它具有`demo-grandson`的所有功能，并且还可以展示标题.代码如下：  
+而现在我们想要在不改变`demo-grandson`的基础上，再实现一个组件，它具有`demo-grandson`的所有功能，并且还可以展示标题。代码如下：  
 ```vue
 <!-- 父组件 -->
 <template>
@@ -335,13 +335,13 @@ export default {
 };
 </script>
 ```
-子组件中的`$attrs`为除`title`外的所有根元素中传入的属性组成的对象，配合`inheritAttrs: false`，并不会让其作为正常的`HTML`属性在`element`中展示。之后再配合`v-bind`将属性分发的`demo-grandson`上：
+子组件中的`$attrs`为除`title`外的所有根元素中传入的属性组成的对象，配合`inheritAttrs: false`，并不会让其作为正常的`HTML`属性在`element`中展示。之后再配合`v-bind`将属性分发到`demo-grandson`上：
 ![](https://raw.githubusercontent.com/wangkaiwd/drawing-bed/master/20200913164907.png)
 
 `$listeners`中包含`v-on`(即`@`)中绑定的所有事件监听函数，同理通过`v-on`分发到`demo-grandson`上：
 ![](https://raw.githubusercontent.com/wangkaiwd/drawing-bed/master/20200913165716.png)
 
-这样`demo-grandson`中有再多的属性和事件，我们都可以通过`v-bind=$attrs`和`v-on=$linstenners`进行传入。而不用每次都在`props`中定义，然后在单独在子组件标签上通过`:`和`@`来单独进行绑定。
+这样`demo-grandson`中有再多的属性和事件，我们都可以通过`v-bind=$attrs`和`v-on=$linstenners`进行传入。而不用每次都在`props`中定义，然后再单独在子组件标签上通过`:`和`@`来进行绑定。
 
 这俩个属性在对项目中用到的`ui`组件库进行二次封装时尤其好用，既可以保证使用原有组件所有的`api`，还可以额外封装一些项目中复用度高的功能。
 
