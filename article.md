@@ -561,6 +561,15 @@ export default {
 
 现在我们便可以通过`$dispatch/$broadcast`来实现跨层级调用`$emit`方法，少写一些进行事件监听的`@`和`$emit`代码。
 
+上述代码参考`element ui`源码中`$dispatch/$broadcast`的相应实现：
+![](https://raw.githubusercontent.com/wangkaiwd/drawing-bed/master/20200914110021.png)
+最终可以通过`mixins`来混入到组件中进行使用： 
+![](https://raw.githubusercontent.com/wangkaiwd/drawing-bed/master/20200914110610.png)
+
+> 截图中的代码地址：  
+> * [emitter](https://github.com/ElemeFE/element/blob/dev/src/mixins/emitter.js)
+> * [form-item](https://github.com/ElemeFE/element/blob/04b5f0d2c042fb1efabaebe40749287761c14a21/packages/form/src/form-item.vue#L52)
+
 
 ### 事件总线(bus)
 `Vue`通过`$emit/$on`实现事件的发布订阅机制，通过`$on`来订阅事件，通过`$emit`来触发`$on`订阅的事件，并将需要的参数传入。我们也正好可以利用`Vue`的`$emit`和`$on`属性来进行组件之间的函数调用。
