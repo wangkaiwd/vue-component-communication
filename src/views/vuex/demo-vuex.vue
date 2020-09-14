@@ -1,10 +1,7 @@
 <template>
   <div class="demo-vuex">
     <h2>{{ count }}</h2>
-    <demo-child
-      :count="count"
-      :add-count="addCount"
-    >
+    <demo-child>
     </demo-child>
     <button @click="addCount">parent click</button>
   </div>
@@ -12,21 +9,18 @@
 
 <script>
 import DemoChild from './demo-child';
+import { mapMutations, mapState } from 'vuex';
 
 export default {
   name: 'DemoProps',
   components: {
     DemoChild
   },
-  data () {
-    return {
-      count: 0
-    };
+  computed: {
+    ...mapState(['count'])
   },
   methods: {
-    addCount () {
-      this.count++;
-    }
+    ...mapMutations(['addCount'])
   }
 };
 </script>

@@ -43,6 +43,11 @@ const routes = [
     path: '/demo-extend-proto',
     component: () => import('@/views/extend-proto/demo-extend-proto'),
     name: '分发+广播'
+  },
+  {
+    path: '/demo-vuex',
+    component: () => import('@/views/vuex/demo-vuex'),
+    name: 'vuex'
   }
 ];
 

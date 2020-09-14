@@ -15,7 +15,7 @@
 ```vue
 <!--demo-props-->
 <template>
-  <div class="demo-access-instance">
+  <div class="demo-vuex">
     <h2>{{ count }}</h2>
     <demo-child
       :count="count"
@@ -46,7 +46,7 @@
 ```vue
 <!--demo-props-->
 <template>
-  <div class="demo-access-instance">
+  <div class="demo-vuex">
     <h2>{{ count }}</h2>
     <demo-child v-bind="{count,addCount}" >
     </demo-child>
@@ -210,7 +210,7 @@ export default {
 `Vue`可以让我们通过`$parent/$children`来直接访问到父组件或子组件实例，这样就可以使用组件中的任意属性或方法。
 ```vue
 <template>
-  <div class="demo-access-instance">
+  <div class="demo-vuex">
     <h2>parent:{{ count }}</h2>
     <h2>child:{{ child.count }}</h2>
     <demo-child>
@@ -638,6 +638,66 @@ export default {
 ### `Vuex`
 对于稍大规模一点的项目来说，通过`Vuex`来管理全局状态比较好的选择。我们可以在任意组件使用`Vuex`中的`state`，并且可以通过`commit`一个`mutation`来更新状态。
 
-下面我们用`Vuex`来再次实现`count`累加的例子：
+下面我们用`Vuex`来再次实现`count`累加的例子。
 
-### 结语
+首先在`store`中定义`state`和`mutation`：
+```js
+export default new Vuex.Store({
+  state: {
+    count: 0
+  },
+  mutations: {
+    addCount (state, count) {
+      state.count++;
+    }
+  },
+});
+```
+
+可以在任意组件中引入，并且更改`state`。
+
+每个文件中引入辅助函数的代码如下：
+```js
+import { mapMutations, mapState } from 'vuex';
+
+export default {
+  // ... some code
+  computed: {
+    ...mapState(['count'])
+  },
+  methods: {
+    ...mapMutations(['addCount'])
+  }
+};
+```
+
+`HTML`模板代码：
+```vue
+<!-- 父组件 -->
+<template>
+  <div class="demo-vuex">
+    <h2>{{ count }}</h2>
+    <demo-child>
+    </demo-child>
+    <button @click="addCount">parent click</button>
+  </div>
+</template>
+
+<!-- 子组件 -->
+<template>
+  <div class="demo-child">
+    <h2>child: {{ count }}</h2>
+    <demo-grandson></demo-grandson>
+    <button @click="addCount">child click</button>
+  </div>
+</template>
+
+<!-- 孙子组件 -->
+<template>
+  <div class="demo-grandson">
+    <h2>grandson count: {{ count }}</h2>
+    <button @click="addCount">grandson click</button>
+  </div>
+</template>
+```
+现在我们可以通过调用`Vuex`通过辅助函数在实例上提供`count`属性和`addCount`方法，就可以任意组件使用和更新`count`。
