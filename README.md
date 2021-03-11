@@ -561,7 +561,7 @@ export default {
 </script>
 ```
 上边代码的逻辑大概如下：
-![](https://raw.githubusercontent.com/wangkaiwd/drawing-bed/master/Untitled-2020-09-14-0028.png)
+![](https://raw.githubusercontent.com/wangkaiwd/drawing-bed/master/20210311112124.png)
 
 现在我们便可以通过`$dispatch/$broadcast`来实现跨层级调用`$emit`方法，少写一些进行事件监听的`@`和`$emit`代码。
 
